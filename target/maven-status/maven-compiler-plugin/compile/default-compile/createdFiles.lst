@@ -1,2 +1,5 @@
-com\mycompany\login\resources\JakartaEE8Resource.class
+config\conexion.class
 com\mycompany\login\JakartaRestConfiguration.class
+com\mycompany\login\resources\JakartaEE8Resource.class
+Servlets\SvCrearUsuario.class
+Mundo\Usuario.class
