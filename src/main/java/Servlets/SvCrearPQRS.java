@@ -17,6 +17,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
 /**
@@ -44,8 +45,19 @@ public class SvCrearPQRS extends HttpServlet {
 
         String titulo = request.getParameter("titulo");
         String descripcion = request.getParameter("descripcion");
+        String categoria = request.getParameter("categoria");
+        
+
         Part adjuntoPart = request.getPart("adjunto");
 
+        // Obtener el ID del usuario desde la sesión
+        HttpSession session = request.getSession(false);
+        int idUsuario = -1; // Valor predeterminado en caso de que no se encuentre el ID del usuario
+        if (session != null) {
+            idUsuario = (int) session.getAttribute("idUsuario");
+        }
+
+         System.out.println("USUARIO INICIADO SECCION Y A QUIEN LE PERTENECE "+idUsuario );
         // Guardar el archivo adjunto en el servidor (si se proporciona)
         String adjuntoFilename = null;
         String adjuntoFilePath = null;
@@ -73,7 +85,7 @@ public class SvCrearPQRS extends HttpServlet {
             }
         }
         // Llamar al método para agregar la PQRS
-        GestionPQRS.agregarPQRS(titulo, descripcion, adjuntoFilePath, "No leído");
+        GestionPQRS.agregarPQRS(titulo, descripcion, adjuntoFilename, "No leído", categoria,  String.valueOf(idUsuario) );
     }
 
     @Override

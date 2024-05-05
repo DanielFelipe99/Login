@@ -12,6 +12,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -20,41 +21,39 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "SvVerificarUsuario", urlPatterns = {"/SvVerificarUsuario"})
 public class SvVerificarUsuario extends HttpServlet {
 
-   
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-      
+
     }
 
-  
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
 
-  
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String nombreCompleto = request.getParameter("nombreCompleto");
         String contrasenia = request.getParameter("contrasenia");
-        
-        if (gestionUsuario.verificarUsuario(nombreCompleto, contrasenia)) {
-            // El usuario está registrado, redirigir a la página principal
+        int idUsuario = gestionUsuario.verificarUsuario(nombreCompleto, contrasenia);
+        if (idUsuario != -1) {
+            HttpSession session = request.getSession();
+            session.setAttribute("idUsuario", idUsuario);
+            session.setAttribute("nombreCompleto", nombreCompleto);
             String script = "<script>alert('Usuario encontrado'); window.location.href = 'templates/User.jsp';</script>";
             response.setContentType("text/html");
             response.getWriter().write(script);
         } else {
             // El usuario no está registrado, mostrar un mensaje de error
-        
-            String script = "<script>alert('Usuario o contraseña incorrectos. Por favor, inténtelo de nuevo.'); window.location.href = 'User.jsp';</script>";
+
+            String script = "<script>alert('Usuario o contraseña incorrectos. Por favor, inténtelo de nuevo.'); window.location.href = 'index.jsp';</script>";
             response.setContentType("text/html");
             response.getWriter().write(script);
         }
     }
 
-   
     @Override
     public String getServletInfo() {
         return "Short description";

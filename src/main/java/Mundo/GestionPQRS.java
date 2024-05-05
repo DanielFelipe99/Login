@@ -15,7 +15,7 @@ import java.sql.SQLException;
  */
 public class GestionPQRS {
 
-    public static void agregarPQRS(String titulo,String descripcion, String adjuntos, String estado) {
+    public static void agregarPQRS(String titulo,String descripcion, String adjuntos, String estado,String tipo_id, String usuario_id) {
         Connection conexion = null;
         PreparedStatement ps = null;
 
@@ -25,13 +25,14 @@ public class GestionPQRS {
             conexion = miConexion.getConexion();
 
             // Preparar la consulta SQL para insertar los datos de la PQRS
-            String consultaPQRS = "INSERT INTO pqrs (titulo,descripcion, adjuntos, estado) VALUES (?,?,?,?)";
+            String consultaPQRS = "INSERT INTO pqrs (titulo,descripcion, adjuntos, estado,tipo_id,usuario_id) VALUES (?,?,?,?,?,?)";
             ps = conexion.prepareStatement(consultaPQRS);
             ps.setString(1, titulo);
             ps.setString(2, descripcion);
             ps.setString(3, adjuntos);
             ps.setString(4, estado);
-
+            ps.setString(5, tipo_id);
+            ps.setString(6,usuario_id);
             // Ejecutar la consulta
             ps.executeUpdate();
 

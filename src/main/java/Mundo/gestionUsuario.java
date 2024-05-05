@@ -61,19 +61,19 @@ public class gestionUsuario {
         }
     }
 
-    public static boolean verificarUsuario(String nombreCompleto, String contrasenia) {
+    public static int verificarUsuario(String nombreCompleto, String contrasenia) {
         Connection conexion = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        boolean usuarioValido = false;
+        int idUsuario = -1;
 
         try {
             // Obtener la conexión desde la clase Conexion
             conexion miConexion = new conexion();
             conexion = miConexion.getConexion();
-            
+
             // Consulta SQL parametrizada para verificar si el usuario existe con el nombre completo y la contraseña
-            String consulta = "SELECT COUNT(*) FROM usuario WHERE nombreCompleto = ? AND contrasenia = ?";
+            String consulta = "SELECT idUsuario FROM usuario WHERE nombreCompleto = ? AND contrasenia = ?";
             ps = conexion.prepareStatement(consulta);
             ps.setString(1, nombreCompleto);
             ps.setString(2, contrasenia);
@@ -81,8 +81,7 @@ public class gestionUsuario {
 
             // Verificar si se encontró algún resultado
             if (rs.next()) {
-                int count = rs.getInt(1);
-                usuarioValido = (count > 0);
+                idUsuario = rs.getInt("idUsuario");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -103,7 +102,7 @@ public class gestionUsuario {
             }
         }
 
-        return usuarioValido;
+        return idUsuario;
     }
 
 }
