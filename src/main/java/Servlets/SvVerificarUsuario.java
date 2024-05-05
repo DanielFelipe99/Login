@@ -42,13 +42,13 @@ public class SvVerificarUsuario extends HttpServlet {
         
         if (gestionUsuario.verificarUsuario(nombreCompleto, contrasenia)) {
             // El usuario está registrado, redirigir a la página principal
-            String script = "<script>alert('Usuario encontrado'); window.location.href = 'index.jsp';</script>";
+            String script = "<script>alert('Usuario encontrado'); window.location.href = 'templates/User.jsp';</script>";
             response.setContentType("text/html");
             response.getWriter().write(script);
         } else {
             // El usuario no está registrado, mostrar un mensaje de error
         
-            String script = "<script>alert('Usuario o contraseña incorrectos. Por favor, inténtelo de nuevo.'); window.location.href = 'index.jsp';</script>";
+            String script = "<script>alert('Usuario o contraseña incorrectos. Por favor, inténtelo de nuevo.'); window.location.href = 'User.jsp';</script>";
             response.setContentType("text/html");
             response.getWriter().write(script);
         }
