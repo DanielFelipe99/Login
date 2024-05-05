@@ -48,15 +48,18 @@ public class SvCrearPQRS extends HttpServlet {
 
         // Guardar el archivo adjunto en el servidor (si se proporciona)
         String adjuntoFilename = null;
+        String adjuntoFilePath = null;
         if (adjuntoPart != null && adjuntoPart.getSize() > 0) {
             // Guardar el archivo adjunto en el servidor
-            
-            String adjuntoDirectory = getServletContext().getRealPath("adjuntos"); // Obtener la ruta real del directorio de adjuntos
+
+            String adjuntoDirectory = getServletContext().getRealPath("/adjuntos");
+
             adjuntoFilename = adjuntoPart.getSubmittedFileName();
 
             // Ruta completa del archivo adjunto
-            String adjuntoFilePath = adjuntoDirectory + File.separator + adjuntoFilename;
-            System.out.println("tuta completa: "+adjuntoFilePath);
+            adjuntoFilePath = adjuntoDirectory + File.separator + adjuntoFilename;
+
+            System.out.println("tuta completa: " + adjuntoFilePath);
 
             // Guardar el archivo adjunto en el sistema de archivos
             try (InputStream input = adjuntoPart.getInputStream(); OutputStream output = new FileOutputStream(adjuntoFilePath)) {
@@ -69,9 +72,8 @@ public class SvCrearPQRS extends HttpServlet {
                 e.printStackTrace();
             }
         }
-
         // Llamar al método para agregar la PQRS
-        GestionPQRS.agregarPQRS(titulo, descripcion, adjuntoFilename, "No leído");
+        GestionPQRS.agregarPQRS(titulo, descripcion, adjuntoFilePath, "No leído");
     }
 
     @Override
