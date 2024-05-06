@@ -1,5 +1,6 @@
 config\conexion.class
 com\mycompany\login\JakartaRestConfiguration.class
+Servlets\SvActualizar.class
 Mundo\Administrador.class
 Servlets\SvCrearUsuario.class
 Mundo\PQRS.class
@@ -7,4 +8,5 @@ com\mycompany\login\resources\JakartaEE8Resource.class
 Mundo\Personas.class
 Servlets\SvVerificarUsuario.class
 Mundo\gestionUsuario.class
+Servlets\SvEliminar.class
 Mundo\Usuario.class

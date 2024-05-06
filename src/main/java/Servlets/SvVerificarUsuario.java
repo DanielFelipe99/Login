@@ -4,9 +4,12 @@
  */
 package Servlets;
 
+import Mundo.GestionPQRS;
+import Mundo.PQRS;
 import Mundo.gestionUsuario;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -39,9 +42,17 @@ public class SvVerificarUsuario extends HttpServlet {
         String contrasenia = request.getParameter("contrasenia");
         int idUsuario = gestionUsuario.verificarUsuario(nombreCompleto, contrasenia);
         if (idUsuario != -1) {
+
+            List<PQRS> pqrss = GestionPQRS.obtenerPQRSporUsuario(String.valueOf(idUsuario));
+            System.out.println("Contenido de la lista pqrsList antes de enviar:");
+            for (PQRS pqrs : pqrss) {
+                System.out.println(pqrs.getTitulo());
+            }
             HttpSession session = request.getSession();
+            session.setAttribute("pqrss", pqrss);
             session.setAttribute("idUsuario", idUsuario);
             session.setAttribute("nombreCompleto", nombreCompleto);
+
             String script = "<script>alert('Usuario encontrado'); window.location.href = 'templates/User.jsp';</script>";
             response.setContentType("text/html");
             response.getWriter().write(script);

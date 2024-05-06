@@ -4,6 +4,8 @@
     Author     : jonathan
 --%>
 
+<%@page import="java.util.List"%>
+<%@page import="Mundo.PQRS"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -14,6 +16,39 @@
         <title>JSP Page</title>
         <style>
             @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+            .navbar-nav.ml-auto .nav-link.dropdown-toggle {
+                white-space: nowrap; /* Evita que el texto se divida en varias líneas */
+            }
+
+            .dropdown-menu {
+                min-width: auto; /* Ajusta el ancho automáticamente al contenido */
+                border: none; /* Elimina el borde del menú */
+                box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15); /* Agrega una sombra */
+            }
+
+            .dropdown-menu .dropdown-item {
+                padding: 0.5rem 1rem; /* Ajusta el espaciado de los elementos del menú */
+            }
+
+            .dropdown-menu .dropdown-item:hover {
+                background-color: #f8f9fa; /* Cambia el color de fondo al pasar el cursor */
+            }
+
+            .dropdown-menu .dropdown-item:focus {
+                background-color: #f8f9fa; /* Cambia el color de fondo al enfocar */
+                color: #212529; /* Cambia el color del texto al enfocar */
+            }
+
+            .dropdown-menu .dropdown-item.active {
+                background-color: #007bff; /* Cambia el color de fondo del elemento activo */
+                color: #fff; /* Cambia el color del texto del elemento activo */
+            }
+
+            .dropdown-menu .dropdown-item:not(:last-child) {
+                border-bottom: 1px solid #dee2e6; /* Agrega un borde inferior entre elementos */
+            }
+
 
             * {
                 margin: 0;
@@ -105,6 +140,8 @@
                 border: none;
             }
 
+
+
             footer {
                 background-color: #343a40;
                 color: #fff;
@@ -127,9 +164,6 @@
                 <!-- Menú de navegación -->
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav mr-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Buscar PQRS</a>
-                        </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#" data-toggle="modal" data-target="#crearModal">Crear PQRS</a>
                         </li>
@@ -174,143 +208,249 @@
                         </div>
                     </div>
 
-                    <!-- Sección para editar PQRS -->
-                    <section>
-                        <h2>Editar PQRS</h2>
-                        <!-- Formulario para editar PQRS -->
+
+                    <!-- Sección para buscar VISUALIZAR -->
+                    <section class="row">
+                        <%
+                            // Obtener la lista de PQRS del atributo "pqrss" en el objeto request
+                            List<PQRS> pqrss = (List<PQRS>) session.getAttribute("pqrss");
+
+                            // Verificar si la lista de PQRS no está vacía
+                            if (pqrss != null && !pqrss.isEmpty()) {
+                                // Iterar sobre la lista de PQRS
+                                for (PQRS pqrs : pqrss) {
+                        %>
+                        <div class="col-md-4 mb-3">
+                            <div class="card overflow-auto">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <span>PQRS TITULO: <%= pqrs.getTitulo()%></span>
+                                    <div>
+                                        <button class="btn btn-danger btn-sm me-2 eliminar-btn" data-id="<%= pqrs.getIdPqrs()%>"><i class="fas fa-trash-alt"></i> Eliminar</button>
+                                        <button class="btn btn-primary btn-sm actualizar-btn" data-id="<%= pqrs.getIdPqrs()%>"><i class="fas fa-edit"></i> Actualizar</button>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="card-title">Descripción: <%= pqrs.getDescripcion()%></h5>
+
+                                    <%
+                                        // Mostrar contenido específico dependiendo del tipo de PQRS
+                                        if (pqrs.getTipo().equals("1")) {
+                                    %>
+                                    <p class="card-text">Tipo: Petición</p>
+                                    <%
+                                    } else if (pqrs.getTipo().equals("2")) {
+                                    %>
+                                    <p class="card-text">Tipo: Queja</p>
+                                    <%
+                                    } else if (pqrs.getTipo().equals("3")) {
+                                    %>
+                                    <p class="card-text">Tipo: Reclamo</p>
+                                    <%
+                                    } else if (pqrs.getTipo().equals("4")) {
+                                    %>
+                                    <p class="card-text">Tipo: Solicitud</p>
+                                    <%
+                                        }
+                                    %>
+                                    <p class="card-text">Adjuntos: <%= pqrs.getAdjuntos()%></p>
+                                    <p class="card-text">Estado: <%= pqrs.getEstado()%></p>
+                                </div>
+                            </div>
+                        </div>
+                        <%
+                            }
+                        } else {
+                        %>
+                        <div class="col-md-12">
+                            <div class="alert alert-info" role="alert">
+                                No hay PQRS disponibles.
+                            </div>
+                        </div>
+                        <%
+                            }
+                        %>
                     </section>
 
-                    <!-- Sección para eliminar PQRS -->
-                    <section>
-                        <h2>Eliminar PQRS</h2>
-                        <!-- Tabla o lista de PQRS con opción para eliminar -->
-                    </section>
 
-                    <!-- Sección para buscar PQRS -->
-                    <section>
-                        <h2>Buscar PQRS</h2>
-                        <!-- Formulario de búsqueda y tabla de resultados -->
-                    </section>
-                </div>
             </section>
-        </main>
+        </div>
+    </section>
+</main>
 
 
 
-        <!-- Modal para crear PQRS -->
-        <div class="modal fade" id="crearModal" tabindex="-1" aria-labelledby="crearModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="crearModalLabel">Crear PQRS</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+<!-- Modal para crear PQRS -->
+<div class="modal fade" id="crearModal" tabindex="-1" aria-labelledby="crearModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="crearModalLabel">Crear PQRS</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Formulario para crear PQRS -->
+                <form action="/Login/SvCrearPQRS" method="post" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="tituloInput">Título</label>
+                        <input type="text" class="form-control" id="tituloInput" name="titulo" placeholder="Ingrese el título">
                     </div>
-                    <div class="modal-body">
-                        <!-- Formulario para crear PQRS -->
-                        <form action="/Login/SvCrearPQRS" method="post" enctype="multipart/form-data">
-                            <div class="form-group">
-                                <label for="tituloInput">Título</label>
-                                <input type="text" class="form-control" id="tituloInput" name="titulo" placeholder="Ingrese el título">
-                            </div>
-                            <div class="form-group">
-                                <label for="descripcionInput">Descripción</label>
-                                <textarea class="form-control" id="descripcionInput" name="descripcion" rows="3" placeholder="Ingrese la descripción"></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label for="categoria">Categoría</label>
-                                <select id="categoria" name="categoria" class="form-control" required>
-                                    <option value="" disabled selected>Seleccione una categoría</option>
-                                    <option value="1">Petición</option>
-                                    <option value="2">Queja</option>
-                                    <option value="3">Reclamo</option>
-                                    <option value="4">Solicitud</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="adjuntoInput">Adjunto (PDF)</label>
-                                <input type="file" class="form-control-file" id="adjuntoInput" name="adjunto">
-                            </div>
-                            <!-- Campo oculto para el ID del usuario -->
-                            <input type="hidden" id="idUsuarioInput" name="idUsuario" value="<%= request.getAttribute("idUsuario")%>">
+                    <div class="form-group">
+                        <label for="descripcionInput">Descripción</label>
+                        <textarea class="form-control" id="descripcionInput" name="descripcion" rows="3" placeholder="Ingrese la descripción"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="categoria">Categoría</label>
+                        <select id="categoria" name="categoria" class="form-control" required>
+                            <option value="" disabled selected>Seleccione una categoría</option>
+                            <option value="1">Petición</option>
+                            <option value="2">Queja</option>
+                            <option value="3">Reclamo</option>
+                            <option value="4">Solicitud</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="adjuntoInput">Adjunto (PDF)</label>
+                        <input type="file" class="form-control-file" id="adjuntoInput" name="adjunto">
+                    </div>
+                    <!-- Campo oculto para el ID del usuario -->
+                    <input type="hidden" id="idUsuarioInput" name="idUsuario" value="<%= request.getAttribute("idUsuario")%>">
 
-                            <button type="submit" class="btn btn-primary">Crear PQRS</button>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                    </div>
-                </div>
+                    <button type="submit" class="btn btn-primary">Crear PQRS</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
             </div>
         </div>
+    </div>
+</div>
 
-        <!-- Modal para editar PQRS -->
-        <div class="modal fade" id="editarModal" tabindex="-1" aria-labelledby="editarModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="editarModalLabel">Editar PQRS</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+<!-- Modal para editar PQRS -->
+<div class="modal fade" id="editarModal" tabindex="-1" aria-labelledby="editarModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editarModalLabel">Editar PQRS</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Formulario para editar PQRS -->
+                <form>
+                    <div class="form-group">
+                        <label for="editarTituloInput">Título</label>
+                        <input type="text" class="form-control" id="editarTituloInput" placeholder="Ingrese el título">
                     </div>
-                    <div class="modal-body">
-                        <!-- Formulario para editar PQRS -->
-                        <form>
-                            <div class="form-group">
-                                <label for="editarTituloInput">Título</label>
-                                <input type="text" class="form-control" id="editarTituloInput" placeholder="Ingrese el título">
-                            </div>
-                            <div class="form-group">
-                                <label for="editarDescripcionInput">Descripción</label>
-                                <textarea class="form-control" id="editarDescripcionInput" rows="3" placeholder="Ingrese la descripción"></textarea>
-                            </div>
-                            <!-- Otros campos necesarios -->
-                        </form>
+                    <div class="form-group">
+                        <label for="editarDescripcionInput">Descripción</label>
+                        <textarea class="form-control" id="editarDescripcionInput" rows="3" placeholder="Ingrese la descripción"></textarea>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                        <button type="button" class="btn btn-primary" id="actualizarPQRSButton">Actualizar PQRS</button>
-                    </div>
-                </div>
+                    <!-- Otros campos necesarios -->
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="actualizarPQRSButton">Actualizar PQRS</button>
             </div>
         </div>
+    </div>
+</div>
 
 
-        <!-- Pie de página -->
-        <footer>
-            <!-- Contenido del pie de página -->
-        </footer>
+<!-- Pie de página -->
+<footer>
+    <!-- Contenido del pie de página -->
+</footer>
 
 
-        <!-- Agregar enlaces a los archivos JS de Bootstrap y jQuery -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-        <script >
+<!-- Agregar enlaces a los archivos JS de Bootstrap y jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script >
 
-            $(document).ready(function () {
-                // Mostrar el modal de creación de PQRS
-                $('a[data-target="#crearModal"]').click(function (e) {
-                    e.preventDefault(); // Evitar que el enlace realice una navegación
-                    $('#crearModal').modal('show');
+    $(document).ready(function () {
+        // Mostrar el modal de creación de PQRS
+        $('a[data-target="#crearModal"]').click(function (e) {
+            e.preventDefault(); // Evitar que el enlace realice una navegación
+            $('#crearModal').modal('show');
+        });
+
+        // Manejar el envío del formulario de creación de PQRS
+        $('#crearPQRSButton').click(function () {
+            var titulo = $('#tituloInput').val();
+            var descripcion = $('#descripcionInput').val();
+
+            // Aquí debes agregar la lógica para enviar los datos del formulario al servidor
+            // y crear un nuevo PQRS
+
+            // Después de crear el PQRS, puedes cerrar el modal
+            $('#crearModal').modal('hide');
+
+            // Opcional: Mostrar un mensaje de éxito o actualizar la lista de PQRS
+        });
+
+        // Manejador de eventos para botones de "Eliminar"
+        $('.eliminar-btn').click(function () {
+            var idPQRS = $(this).data('id');
+            if (confirm("¿Estás seguro de que deseas eliminar el tutorial con ID " + idPQRS + "?")) {
+
+                $.ajax({
+                    url: "/Login/SvEliminar?id=" + idPQRS,
+                    method: "POST",
+                    success: function (response) {
+                        // Manejar la respuesta del servidor
+                        if (response === "success") {
+
+                            alert("El PQRS se eliminó correctamente.");
+                            location.reload();
+                        } else {
+
+                            alert("Hubo un error al eliminar PQRS.");
+                        }
+                    },
+                    error: function (error) {
+                        console.error("Error al eliminar el PQRS", error);
+                    }
                 });
+            } else {
 
-                // Manejar el envío del formulario de creación de PQRS
-                $('#crearPQRSButton').click(function () {
-                    var titulo = $('#tituloInput').val();
-                    var descripcion = $('#descripcionInput').val();
 
-                    // Aquí debes agregar la lógica para enviar los datos del formulario al servidor
-                    // y crear un nuevo PQRS
+            }
+        });
 
-                    // Después de crear el PQRS, puedes cerrar el modal
-                    $('#crearModal').modal('hide');
+    });
 
-                    // Opcional: Mostrar un mensaje de éxito o actualizar la lista de PQRS
-                });
-            });
+</script>
 
-        </script>
-    </body>
+<script>
+$(document).ready(function() {
+    // Capturar el evento de clic en el botón "Actualizar"
+    $('.actualizar-btn').click(function() {
+        // Obtener el ID de la PQRS seleccionada
+        var pqrsId = $(this).data('id');
+        
+        // Hacer una petición AJAX para obtener la información de la PQRS
+        $.ajax({
+            url: '/Login/SvActualizar?id=' + pqrsId, // URL del servlet para obtener la información de la PQRS
+            method: 'POST',
+            success: function(data) {
+                // Llenar los campos del formulario con la información obtenida
+                $('#editarTituloInput').val(data.titulo);
+                $('#editarDescripcionInput').val(data.descripcion);
+                // Otros campos necesarios...
+                
+                // Mostrar el modal para editar la PQRS
+                $('#editarModal').modal('show');
+            },
+            error: function() {
+                alert('Error al obtener la información de la PQRS');
+            }
+        });
+    });
+});
+</script>
+</body>
 </html>

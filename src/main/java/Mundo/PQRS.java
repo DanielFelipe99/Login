@@ -13,20 +13,23 @@ public class PQRS {
     /*----------------------------------------------------------------------------
      * Atributos
      *--------------------------------------------------------------------------*/
+    private String idPqrs;
     private String titulo;
     private String descripcion;
     private String adjuntos;
     private String estado;
-
+    private String tipo;
     /*---------------------------------------------------------------------------
      * Metodos 
      *-------------------------------------------------------------------------*/
     // Constructor
-    public PQRS(String titulo, String descripcion, String adjuntos, String estado) {
+    public PQRS(String idPqrs ,String titulo, String descripcion, String adjuntos, String estado,String tipo) {
+        this.idPqrs=idPqrs;
         this.titulo=titulo;
         this.descripcion = descripcion;
         this.adjuntos = adjuntos;
         this.estado = estado;
+        this.tipo=tipo;
     }
 
     public String getTitulo() {
@@ -64,4 +67,21 @@ public class PQRS {
         this.estado = estado;
     }
 
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public String getIdPqrs() {
+        return idPqrs;
+    }
+
+    public void setIdPqrs(String idPqrs) {
+        this.idPqrs = idPqrs;
+    }
+
+    
 }
