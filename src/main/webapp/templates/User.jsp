@@ -327,6 +327,7 @@
     </div>
 </div>
 
+
 <!-- Modal para editar PQRS -->
 <div class="modal fade" id="editarModal" tabindex="-1" aria-labelledby="editarModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -339,25 +340,50 @@
             </div>
             <div class="modal-body">
                 <!-- Formulario para editar PQRS -->
-                <form>
+                <form action="/Login/SvActualizar" method="get" enctype="multipart/form-data">
+                    <input type="hidden" id="editarIdPQRSInput" name="idPQRS"> <!-- Campo oculto para almacenar el ID de la PQRS -->
+
                     <div class="form-group">
                         <label for="editarTituloInput">Título</label>
-                        <input type="text" class="form-control" id="editarTituloInput" placeholder="Ingrese el título">
+                        <input type="text" class="form-control" id="editarTituloInput" name="titulo" placeholder="Ingrese el título">
                     </div>
                     <div class="form-group">
                         <label for="editarDescripcionInput">Descripción</label>
-                        <textarea class="form-control" id="editarDescripcionInput" rows="3" placeholder="Ingrese la descripción"></textarea>
+                        <textarea class="form-control" id="editarDescripcionInput" name="descripcion" rows="3" placeholder="Ingrese la descripción"></textarea>
                     </div>
+                    <div class="form-group">
+                        <label for="editarAdjuntoInput">Adjunto</label>
+                        <input value="editarAdjuntoInput" type="file" class="form-control-file" id="editarAdjuntoInput" name="adjuntos">
+                    </div>
+                    <div class="form-group">
+                        <label for="editarEstadoInput">Estado</label>
+                        <input value="editarEstadoInput" type="text" class="form-control" id="editarEstadoInput" name="estado" placeholder="Ingrese el estado" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label for="editarTipoIdInput">Tipo ID</label>
+                        <select id="editarTipoIdInput" name="tipo_id" class="form-control" required>
+                            <option value="editarTipoInput" disabled selected>Seleccione un tipo ID</option>
+                            <option value="1">Petición</option>
+                            <option value="2">Queja</option>
+                            <option value="3">Reclamo</option>
+                            <option value="4">Solicitud</option>
+                        </select>
+                    </div>
+
                     <!-- Otros campos necesarios -->
+                    <button type="submit" class="btn btn-primary" id="actualizarPQRSButton">Actualizar PQRS</button>
                 </form>
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-primary" id="actualizarPQRSButton">Actualizar PQRS</button>
+
             </div>
         </div>
     </div>
 </div>
+
+
 
 
 <!-- Pie de página -->
@@ -426,31 +452,39 @@
 </script>
 
 <script>
-$(document).ready(function() {
-    // Capturar el evento de clic en el botón "Actualizar"
-    $('.actualizar-btn').click(function() {
-        // Obtener el ID de la PQRS seleccionada
-        var pqrsId = $(this).data('id');
-        
-        // Hacer una petición AJAX para obtener la información de la PQRS
-        $.ajax({
-            url: '/Login/SvActualizar?id=' + pqrsId, // URL del servlet para obtener la información de la PQRS
-            method: 'POST',
-            success: function(data) {
-                // Llenar los campos del formulario con la información obtenida
-                $('#editarTituloInput').val(data.titulo);
-                $('#editarDescripcionInput').val(data.descripcion);
-                // Otros campos necesarios...
-                
-                // Mostrar el modal para editar la PQRS
-                $('#editarModal').modal('show');
-            },
-            error: function() {
-                alert('Error al obtener la información de la PQRS');
-            }
+    $(document).ready(function () {
+        // Capturar el evento de clic en el botón "Actualizar"
+        $('.actualizar-btn').click(function () {
+            // Obtener el ID de la PQRS seleccionada
+            var pqrsId = $(this).data('id');
+
+            // Hacer una petición AJAX para obtener la información de la PQRS
+            $.ajax({
+                url: '/Login/SvActualizar?id=' + pqrsId, // URL del servlet para obtener la información de la PQRS
+                method: 'POST',
+                success: function (data) {
+
+                    // Llenar los campos del formulario con la información obtenida
+                    $('#editarIdPQRSInput').val(pqrsId);
+                    $('#editarTituloInput').val(data.titulo);
+                    $('#editarDescripcionInput').val(data.descripcion);
+                    $('#editarAdjuntoInput').val(data.adjunto);
+                    $('#editarEstadoInput').val(data.estado);
+                    
+                    $('#editarTipoInput').val(data.tipo_id);
+                    $('#editarUsuarioIdInput').val(data.usuario_id);
+                    
+                    
+
+                    $('#editarModal').modal('show');
+
+                },
+                error: function () {
+                    alert('Error al obtener la información de la PQRS');
+                }
+            });
         });
     });
-});
 </script>
 </body>
 </html>
