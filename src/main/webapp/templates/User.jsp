@@ -13,7 +13,7 @@
         <!-- Agregar enlaces a los archivos CSS de Bootstrap -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Usuario</title>
         <style>
             @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 

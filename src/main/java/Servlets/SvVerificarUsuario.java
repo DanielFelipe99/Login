@@ -40,9 +40,12 @@ public class SvVerificarUsuario extends HttpServlet {
             throws ServletException, IOException {
         String nombreCompleto = request.getParameter("nombreCompleto");
         String contrasenia = request.getParameter("contrasenia");
-        int idUsuario = gestionUsuario.verificarUsuario(nombreCompleto, contrasenia);
-        if (idUsuario != -1) {
 
+        int idUsuario = gestionUsuario.verificarUsuario(nombreCompleto, contrasenia, "usuario");
+        int idAdmin = gestionUsuario.verificarUsuario(nombreCompleto, contrasenia, "administrador");
+
+        if (idUsuario != -1) {
+            // Usuario encontrado, redirigir a la página de usuario
             List<PQRS> pqrss = GestionPQRS.obtenerPQRSporUsuario(String.valueOf(idUsuario));
             System.out.println("Contenido de la lista pqrsList antes de enviar:");
             for (PQRS pqrs : pqrss) {
@@ -52,13 +55,23 @@ public class SvVerificarUsuario extends HttpServlet {
             session.setAttribute("pqrss", pqrss);
             session.setAttribute("idUsuario", idUsuario);
             session.setAttribute("nombreCompleto", nombreCompleto);
-
+            session.setAttribute("tipoUsuario", "usuario"); // esta línea para usuarios normales
+            
             String script = "<script>alert('Usuario encontrado'); window.location.href = 'templates/User.jsp';</script>";
             response.setContentType("text/html");
             response.getWriter().write(script);
+        } else if (idAdmin != -1) {
+            // Administrador encontrado, redirigir a la página de administrador
+            HttpSession session = request.getSession();
+            session.setAttribute("idAdmin", idAdmin);
+            session.setAttribute("nombreAdmin", nombreCompleto);
+            session.setAttribute("tipoUsuario", "administrador"); //tipo de usuario como administrador
+            
+            String script = "<script>alert('Administrador encontrado'); window.location.href = 'templates/Admin.jsp';</script>";
+            response.setContentType("text/html");
+            response.getWriter().write(script);
         } else {
-            // El usuario no está registrado, mostrar un mensaje de error
-
+            // Ningún usuario ni administrador encontrado, mostrar mensaje de error
             String script = "<script>alert('Usuario o contraseña incorrectos. Por favor, inténtelo de nuevo.'); window.location.href = 'index.jsp';</script>";
             response.setContentType("text/html");
             response.getWriter().write(script);

@@ -61,19 +61,25 @@ public class gestionUsuario {
         }
     }
 
-    public static int verificarUsuario(String nombreCompleto, String contrasenia) {
+    public static int verificarUsuario(String nombreCompleto, String contrasenia, String tipo) {
         Connection conexion = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        int idUsuario = -1;
+        int id = -1;
 
         try {
             // Obtener la conexión desde la clase Conexion
             conexion miConexion = new conexion();
             conexion = miConexion.getConexion();
 
-            // Consulta SQL parametrizada para verificar si el usuario existe con el nombre completo y la contraseña
-            String consulta = "SELECT idUsuario FROM usuario WHERE nombreCompleto = ? AND contrasenia = ?";
+            // Consulta SQL parametrizada para verificar las credenciales
+            String consulta = "";
+            if (tipo.equals("usuario")) {
+                consulta = "SELECT idUsuario FROM usuario WHERE nombreCompleto = ? AND contrasenia = ?";
+            } else if (tipo.equals("administrador")) {
+                consulta = "SELECT idAdministrador FROM administrador WHERE nombreAdmin = ? AND contrasenia = ?";
+            }
+
             ps = conexion.prepareStatement(consulta);
             ps.setString(1, nombreCompleto);
             ps.setString(2, contrasenia);
@@ -81,8 +87,13 @@ public class gestionUsuario {
 
             // Verificar si se encontró algún resultado
             if (rs.next()) {
-                idUsuario = rs.getInt("idUsuario");
+                if (tipo.equals("usuario")) {
+                    id = rs.getInt("idUsuario");
+                } else if (tipo.equals("administrador")) {
+                    id = rs.getInt("idAdministrador");
+                }
             }
+
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -102,7 +113,7 @@ public class gestionUsuario {
             }
         }
 
-        return idUsuario;
+        return id;
     }
 
 }
