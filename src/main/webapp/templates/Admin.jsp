@@ -222,7 +222,7 @@
                                                             <div class="card-header d-flex justify-content-between align-items-center">
                                                                 <span>PQRS TITULO: <%= pqrs.getTitulo()%></span>
                                                                 <div>
-                                                                    <button class="btn btn-primary btn-sm actualizar-btn" data-id="<%= pqrs.getIdPqrs()%>"><i class="fas fa-edit"></i> Actualizar</button>
+                                                                    <button class="btn btn-primary btn-sm responder-btn" data-id="<%= pqrs.getIdPqrs()%>"><i class="fas fa-edit"></i> Responder</button>
                                                                 </div>
                                                             </div>
                                                             <div class="card-body">
@@ -270,6 +270,35 @@
                                         </section>
                                     </main>
 
+                                                
+                                                <div class="modal fade" id="respuestaModal" tabindex="-1" role="dialog" aria-labelledby="respuestaModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="respuestaModalLabel">Responder PQRS</h5>
+                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <form id="formRespuestaPQRS" action="/Login/SvResponder" method="post">
+                                                                    <div class="form-group">
+                                                                        <label for="respuesta">Respuesta:</label>
+                                                                        <textarea class="form-control" id="respuesta" name="respuesta" rows="3" placeholder="Ingrese la respuesta"></textarea>
+                                                                        <input type="hidden" id="idPQRS" name="idPQRS">
+                                                                        <input type="hidden" id="idRespuesta" name="idRespuesta">
+                                                                    </div>
+                                                                
+                                                           
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                                                    <button type="submit" class="btn btn-primary" id="btnEnviarRespuesta">Enviar respuesta</button>
+                                                                </div>
+                                                                </form>
+                                                            </div>    
+                                                        </div>
+                                                    </div>
+                                                </div>
 
 <!-- Pie de página -->
 <footer>
@@ -297,7 +326,7 @@
 <script>
     $(document).ready(function () {
         // Capturar el evento de clic en el botón "Actualizar"
-        $('.actualizar-btn').click(function () {
+        $('.responder-btn').click(function () {
             // Obtener el ID de la PQRS seleccionada
             var pqrsId = $(this).data('id');
 
@@ -319,7 +348,7 @@
                     
                     
 
-                    $('#editarModal').modal('show');
+                    $('#respuestaModal').modal('show');
 
                 },
                 error: function () {

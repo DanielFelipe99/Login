@@ -55,6 +55,44 @@ public class GestionPQRS {
             }
         }
     }
+    
+     public static void responderPQRS(String respuesta) {
+        Connection conexion = null;
+        PreparedStatement ps = null;
+
+        try {
+            // Código para obtener la conexión a la base de datos
+            conexion miConexion = new conexion();
+            conexion = miConexion.getConexion();
+
+            // Preparar la consulta SQL para insertar la respuesta en la tabla respuesta_pqrs
+            String consulta = "INSERT INTO respuesta_pqrs (respuesta) VALUES (?)";
+            ps = conexion.prepareStatement(consulta);
+            ps.setString(1, respuesta);
+
+            // Ejecutar la consulta
+            ps.executeUpdate();
+            ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Manejo de excepciones, por ejemplo, redirigir a una página de error
+        } finally {
+            // Cerrar recursos
+          
+            // Manejo de cierre de conexión y declaración
+               try {
+                
+                if (ps != null) {
+                    ps.close();
+                }
+                if (conexion != null) {
+                    conexion.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     public static List<PQRS> obtenerPQRSporUsuario(String usuarioId) {
         List<PQRS> pqrsList = new ArrayList<>();
@@ -224,6 +262,56 @@ public class GestionPQRS {
                 ps.setString(5, tipoId);
                 ps.setString(6, usuarioId);
                 ps.setString(7, idPQRS);
+
+                // Ejecutar la consulta
+                int filasActualizadas = ps.executeUpdate();
+
+                // Verificar si se actualizó correctamente
+                return filasActualizadas > 0;
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return false;
+            } finally {
+                // Cerrar recursos
+                try {
+                    if (ps != null) {
+                        ps.close();
+                    }
+                    if (conexion != null) {
+                        conexion.close();
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        } else {
+            // Si no se encontró el PQRS, devolver false
+            return false;
+        }
+    }
+    
+     public static boolean actualizarEstado(String idPQRS,String estado) {
+        // Obtener el PQRS por su ID
+        PQRS pqrs = obtenerPQRSId(idPQRS);
+
+        // Verificar si se encontró el PQRS
+        if (pqrs != null) {
+            Connection conexion = null;
+            PreparedStatement ps = null;
+
+            try {
+                // Obtener la conexión desde la clase Conexion
+                conexion miConexion = new conexion();
+                conexion = miConexion.getConexion();
+
+                // Preparar la consulta SQL para actualizar los datos del PQRS
+                String consultaActualizarPQRS = "UPDATE pqrs SET estado=? WHERE idPQRS=?";
+                ps = conexion.prepareStatement(consultaActualizarPQRS);
+
+             
+                ps.setString(1, estado);
+             
+                ps.setString(2, idPQRS);
 
                 // Ejecutar la consulta
                 int filasActualizadas = ps.executeUpdate();
