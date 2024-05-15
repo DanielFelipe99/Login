@@ -48,9 +48,9 @@ public class SvVerificarUsuario extends HttpServlet {
             // Usuario encontrado, redirigir a la página de usuario
             List<PQRS> pqrss = GestionPQRS.obtenerPQRSporUsuario(String.valueOf(idUsuario));
             System.out.println("Contenido de la lista pqrsList antes de enviar:");
-            for (PQRS pqrs : pqrss) {
-                System.out.println(pqrs.getTitulo());
-            }
+            //for (PQRS pqrs : pqrss) {
+              //  System.out.println(pqrs.getTitulo());
+            //}
             HttpSession session = request.getSession();
             session.setAttribute("pqrss", pqrss);
             session.setAttribute("idUsuario", idUsuario);
@@ -61,8 +61,15 @@ public class SvVerificarUsuario extends HttpServlet {
             response.setContentType("text/html");
             response.getWriter().write(script);
         } else if (idAdmin != -1) {
+            
+            List<PQRS> todo=GestionPQRS.obtenerTodosPQRS();
             // Administrador encontrado, redirigir a la página de administrador
+            for (PQRS pqrs : todo) {
+                System.out.println(pqrs.getTitulo());
+            }
             HttpSession session = request.getSession();
+            session.setAttribute("pqrsstodos", todo);
+            
             session.setAttribute("idAdmin", idAdmin);
             session.setAttribute("nombreAdmin", nombreCompleto);
             session.setAttribute("tipoUsuario", "administrador"); //tipo de usuario como administrador

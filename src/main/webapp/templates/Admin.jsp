@@ -210,7 +210,7 @@
                                                 <section class="row">
                                                     <%
                                                         // Obtener la lista de PQRS del atributo "pqrss" en el objeto request
-                                                        List<PQRS> pqrss = (List<PQRS>) session.getAttribute("pqrss");
+                                                        List<PQRS> pqrss = (List<PQRS>) session.getAttribute("pqrsstodos");
 
                                                         // Verificar si la lista de PQRS no está vacía
                                                         if (pqrss != null && !pqrss.isEmpty()) {
@@ -285,7 +285,7 @@
                                                                     <div class="form-group">
                                                                         <label for="respuesta">Respuesta:</label>
                                                                         <textarea class="form-control" id="respuesta" name="respuesta" rows="3" placeholder="Ingrese la respuesta"></textarea>
-                                                                        <input type="hidden" id="idPQRS" name="idPQRS">
+                                                                        <input type="hidden" id="editarIdPQRSInput" name="idPQRS">
                                                                         <input type="hidden" id="idRespuesta" name="idRespuesta">
                                                                     </div>
                                                                 
@@ -329,7 +329,7 @@
         $('.responder-btn').click(function () {
             // Obtener el ID de la PQRS seleccionada
             var pqrsId = $(this).data('id');
-
+            
             // Hacer una petición AJAX para obtener la información de la PQRS
             $.ajax({
                 url: '/Login/SvActualizar?id=' + pqrsId, // URL del servlet para obtener la información de la PQRS

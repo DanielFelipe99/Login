@@ -55,8 +55,8 @@ public class GestionPQRS {
             }
         }
     }
-    
-     public static void responderPQRS(String respuesta) {
+
+    public static void responderPQRS(String respuesta, String idPQRS) {
         Connection conexion = null;
         PreparedStatement ps = null;
 
@@ -66,22 +66,21 @@ public class GestionPQRS {
             conexion = miConexion.getConexion();
 
             // Preparar la consulta SQL para insertar la respuesta en la tabla respuesta_pqrs
-            String consulta = "INSERT INTO respuesta_pqrs (respuesta) VALUES (?)";
+            String consulta = "INSERT INTO respuesta_pqrs (idPQRS, respuesta) VALUES (?, ?)";
             ps = conexion.prepareStatement(consulta);
-            ps.setString(1, respuesta);
+            ps.setString(1, idPQRS);
+            ps.setString(2, respuesta);
 
             // Ejecutar la consulta
             ps.executeUpdate();
-            ps.close();
         } catch (SQLException e) {
             e.printStackTrace();
             // Manejo de excepciones, por ejemplo, redirigir a una página de error
         } finally {
             // Cerrar recursos
-          
+
             // Manejo de cierre de conexión y declaración
-               try {
-                
+            try {
                 if (ps != null) {
                     ps.close();
                 }
@@ -289,8 +288,8 @@ public class GestionPQRS {
             return false;
         }
     }
-    
-     public static boolean actualizarEstado(String idPQRS,String estado) {
+
+    public static boolean actualizarEstado(String idPQRS, String estado) {
         // Obtener el PQRS por su ID
         PQRS pqrs = obtenerPQRSId(idPQRS);
 
@@ -308,9 +307,8 @@ public class GestionPQRS {
                 String consultaActualizarPQRS = "UPDATE pqrs SET estado=? WHERE idPQRS=?";
                 ps = conexion.prepareStatement(consultaActualizarPQRS);
 
-             
                 ps.setString(1, estado);
-             
+
                 ps.setString(2, idPQRS);
 
                 // Ejecutar la consulta
@@ -339,4 +337,61 @@ public class GestionPQRS {
             return false;
         }
     }
+
+    public static List<PQRS> obtenerTodosPQRS() {
+        List<PQRS> pqrsList = new ArrayList<>();
+        Connection conexion = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            // Obtener la conexión desde la clase Conexion
+            conexion miConexion = new conexion();
+            conexion = miConexion.getConexion();
+
+            // Preparar la consulta SQL para obtener todos los PQRS
+            String consultaTodosPQRS = "SELECT * FROM pqrs";
+            ps = conexion.prepareStatement(consultaTodosPQRS);
+
+            // Ejecutar la consulta
+            rs = ps.executeQuery();
+
+            // Iterar sobre los resultados y agregarlos a la lista
+            while (rs.next()) {
+                // Crear un objeto PQRS usando el constructor proporcionado
+                PQRS pqrs = new PQRS(
+                        rs.getString("idPQRS"),
+                        rs.getString("titulo"),
+                        rs.getString("descripcion"),
+                        rs.getString("adjuntos"),
+                        rs.getString("estado"),
+                        rs.getString("tipo_id"),
+                        rs.getString("usuario_id")
+                );
+
+                pqrsList.add(pqrs);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            // Cerrar recursos
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+                if (conexion != null) {
+                    conexion.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return pqrsList;
+    }
+
 }

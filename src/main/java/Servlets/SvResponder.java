@@ -43,8 +43,7 @@ public class SvResponder extends HttpServlet {
         
         String idPQRS = request.getParameter("idPQRS");
         
-        GestionPQRS pqrs = new GestionPQRS();
-        
+       
 
         String titulo = request.getParameter("titulo");
         String descripcion = request.getParameter("descripcion");
@@ -60,7 +59,8 @@ public class SvResponder extends HttpServlet {
         GestionPQRS.actualizarEstado(idPQRS, "Revisado");
         // Aquí puedes llamar al método que has creado para manejar la respuesta
         // Supongamos que el método se llama "responderPQRS" y está en la clase "GestionPQRS"
-        GestionPQRS.responderPQRS(respuesta);
+        System.out.println("El id pqrs : "+idPQRS);
+        GestionPQRS.responderPQRS(respuesta,idPQRS);
         
         String script = "<script>alert('Respuesta realizada correctamente.'); window.location.href = 'templates/Admin.jsp';</script>";
         response.setContentType("text/html");

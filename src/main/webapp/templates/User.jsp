@@ -312,7 +312,7 @@
                     </div>
                     <div class="form-group">
                         <label for="adjuntoInput">Adjunto (PDF)</label>
-                        <input type="file" class="form-control-file" id="adjuntoInput" name="adjunto">
+                        <input type="file" class="form-control-file" id="adjuntoInput" name="adjunto" accept=".pdf">
                     </div>
                     <!-- Campo oculto para el ID del usuario -->
                     <input type="hidden" id="idUsuarioInput" name="idUsuario" value="<%= request.getAttribute("idUsuario")%>">

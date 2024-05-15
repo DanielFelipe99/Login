@@ -34,6 +34,9 @@ public class PQRS {
         this.usuraio_id=usuario_id;
     }
 
+    public PQRS() {
+    }
+
     public String getTitulo() {
         return titulo;
     }
