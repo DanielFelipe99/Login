@@ -10,7 +10,7 @@ import java.util.List;
  *
  * @author jonathan
  */
-public class Usuario extends Personas {
+public class Usuario{
 
 
     
@@ -18,45 +18,81 @@ public class Usuario extends Personas {
     /*-----------------------------------
      *Atributos  
      *----------------------------------*/
-    private int idUsuario;
-    private List<Personas> listaUsuarios;
+    private String idUsuario;
+    private String nombreCompleto;
+    private String numeroTelefono;
+    private String correo;
+    private String contrasenia;
+    private String cedula;
 
     
     /*-----------------------------------------------
-     *Metodso 
+     *Metodos 
      *---------------------------------------------*/
 
-
-    public Usuario(int idUsuario,String nombreCompleto, String numeroTelefono, String cedula, String correo) {
-        super(nombreCompleto, numeroTelefono, cedula, correo);
+    public Usuario(String idUsuario, String nombreCompleto, String numeroTelefono, String correo, String contrasenia, String cedula) {
         this.idUsuario = idUsuario;
+        this.nombreCompleto = nombreCompleto;
+        this.numeroTelefono = numeroTelefono;
+        this.correo = correo;
+        this.contrasenia = contrasenia;
+        this.cedula = cedula;
     }
 
-    public void registrarUsuario(Usuario usuario) {
-        
+    public Usuario() {
     }
     
-    
-    
-    public Usuario buscarUsuarioPorCedula(String cedula) {
-     return null;
-    }
     
 
-    public void eliminarUsuario(String cedula) {
-        
-    }
-    
-    public void actualizarUsuario(Usuario usuario) {
-       
-    }
-
-    public int getIdUsuario() {
+    public String getIdUsuario() {
         return idUsuario;
     }
 
-    public void setIdUsuario(int idUsuario) {
+    public void setIdUsuario(String idUsuario) {
         this.idUsuario = idUsuario;
     }
+
+    public String getNombreCompleto() {
+        return nombreCompleto;
+    }
+
+    public void setNombreCompleto(String nombreCompleto) {
+        this.nombreCompleto = nombreCompleto;
+    }
+
+    public String getNumeroTelefono() {
+        return numeroTelefono;
+    }
+
+    public void setNumeroTelefono(String numeroTelefono) {
+        this.numeroTelefono = numeroTelefono;
+    }
+
+    public String getCorreo() {
+        return correo;
+    }
+
+    public void setCorreo(String correo) {
+        this.correo = correo;
+    }
+
+    public String getContrasenia() {
+        return contrasenia;
+    }
+
+    public void setContrasenia(String contrasenia) {
+        this.contrasenia = contrasenia;
+    }
+
+    public String getCedula() {
+        return cedula;
+    }
+
+    public void setCedula(String cedula) {
+        this.cedula = cedula;
+    }
+    
+    
+
     
 }

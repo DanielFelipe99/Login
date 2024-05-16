@@ -175,12 +175,19 @@
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <%
                                         String nombreCompleto = (String) session.getAttribute("nombreCompleto");
+                                        String idUsuario = String.valueOf(session.getAttribute("idUsuario"));
+                                        System.out.println("Usuario: " + idUsuario);
                                     %>
                                     <%= nombreCompleto%>
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                     <!-- Opciones del menú desplegable -->
-                                    <a class="dropdown-item" href="#">Editar información</a>
+                                    <%
+                                    String idUsuario2 = String.valueOf(session.getAttribute("idUsuario"));
+                                    System.out.println("Usuario: " + idUsuario2);
+
+                                    %>  
+                                    <a class="dropdown-item" data-idUsuario="<%=idUsuario2%>">Editar información</a>
                                     <a class="dropdown-item" href="../index.jsp">Cerrar sesión</a>
                                 </div>
                             </li>
@@ -327,6 +334,63 @@
     </div>
 </div>
 
+                    
+<!-- Modal para editar USUARIO -->
+<div class="modal fade" id="editarUsuarioModal" tabindex="-1" aria-labelledby="editarUsuarioModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editarModalLabel">Editar informacion</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Formulario para editar USUARIO -->
+                <form action="/Login/SvActualizarUsuario" method="get" enctype="multipart/form-data">
+                    <input type="hidden" id="editarIdUsuarioInput" name="idUsuario"> <!-- Campo oculto para almacenar el ID de la PQRS -->
+
+                    <div class="form-group">
+                        <label for="editarNombreInput">Nombre</label>
+                        <input type="text" class="form-control" id="editarNombreInput" name="nombreCompleto">
+                    </div>
+                    <div class="form-group">
+                        <label for="editarTelefonoInput">Telefono</label>
+                        <input type="text" class="form-control" id="editarTelefonoInput" name="numeroTelefono">
+                    </div>
+                    <div class="form-group">
+                        <label for="editarCedulaInput">Cedula</label>
+                        <input type="text" class="form-control" id="editarCedulaInput" name="cedula">
+                    </div>
+                    <div class="form-group">
+                        <label for="editarCorreoInput">Correo</label>
+                        <input type="text" class="form-control" id="editarCorreoInput" name="correo">
+                    </div>
+                    <div class="form-group">
+                        <label for="editarContraseniaInput">Contrasenia</label>
+                        <input type="text" class="form-control" id="editarContraseniaInput" name="contrasenia">
+                    </div>
+
+                    <!-- Otros campos necesarios -->
+                    <button type="submit" class="btn btn-primary" id="actualizarUsuarioSButton">Actualizar informacion</button>
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+
+            </div>
+        </div>
+    </div>
+</div>                   
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
 
 <!-- Modal para editar PQRS -->
 <div class="modal fade" id="editarModal" tabindex="-1" aria-labelledby="editarModalLabel" aria-hidden="true">
@@ -486,5 +550,40 @@
         });
     });
 </script>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Capturar el evento de clic en el botón "Actualizar"
+        document.querySelectorAll('.dropdown-item').forEach(function (button) {
+            button.addEventListener('click', function () {
+                // Obtener el ID de usuario de los datos del botón
+                var userId = this.getAttribute('data-idUsuario');
+
+                console.log("Usuario actual: ", userId);
+                
+                $.ajax({
+                url: '/Login/SvActualizarUsuario?idUser=' + userId, // URL del servlet para obtener la información de la PQRS
+                method: 'POST',
+                success: function (data) {
+
+                    $('#editarIdUsuarioInput').val(userId);
+                    $('#editarNombreInput').val(data.nombreCompleto);
+                    $('#editarTelefonoInput').val(data.numeroTelefono);
+                    $('#editarCedulaInput').val(data.cedula);
+                    $('#editarCorreoInput').val(data.correo);
+                    $('#editarContraseniaInput').val(data.contrasenia);
+                    $('#editarUsuarioModal').modal('show');
+
+                },
+                error: function () {
+                    alert('Error al obtener la información del usuario');
+                }
+            });
+            });
+        });
+    });
+</script>
+
 </body>
 </html>
