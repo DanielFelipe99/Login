@@ -4,13 +4,25 @@
  */
 package Mundo;
 
+
 import config.conexion;
+import javax.mail.Authenticator;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+
 
 /**
  *
@@ -56,9 +68,10 @@ public class GestionPQRS {
         }
     }
 
-    public static void responderPQRS(String respuesta, String idPQRS) {
+   public static void responderPQRS(String respuesta, String idPQRS) {
         Connection conexion = null;
         PreparedStatement ps = null;
+     
 
         try {
             // Código para obtener la conexión a la base de datos
@@ -73,14 +86,21 @@ public class GestionPQRS {
 
             // Ejecutar la consulta
             ps.executeUpdate();
+
+            // Obtener la información del usuario para enviar el correo electrónico
+            //List<Usuario> userList = obtenerUsuario(idUsuario);
+
+            // Enviar correo electrónico al usuario
+            //for (Usuario usuario : userList) {
+              //  enviarCorreo(usuario.getCorreo(), "Respuesta a su PQRS", "Estimado " + usuario.getNombreCompleto() + ",\n\nHemos recibido su PQRS y le estamos enviando la siguiente respuesta:\n\n" + respuesta);
+            //}
         } catch (SQLException e) {
             e.printStackTrace();
             // Manejo de excepciones, por ejemplo, redirigir a una página de error
         } finally {
             // Cerrar recursos
-
-            // Manejo de cierre de conexión y declaración
             try {
+                
                 if (ps != null) {
                     ps.close();
                 }
@@ -92,7 +112,38 @@ public class GestionPQRS {
             }
         }
     }
+   
+   /*
+    public static void enviarCorreo(String destinatario, String asunto, String cuerpo) throws AddressException, MessagingException {
+        // Configuración para enviar correo electrónico
+        String remitente = "danielf.zapata221@umariana.edu.co"; // Coloca aquí tu dirección de correo
+        String password = "1085346286"; // Coloca aquí tu contraseña de correo
 
+        Properties props = new Properties();
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.port", "587");
+
+         Session session = Session.getInstance(props,new Authenticator() {
+           
+        });
+
+       
+            
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(remitente));
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(destinatario));
+            message.setSubject(asunto);
+            message.setText(cuerpo);
+
+            Transport.send(message);
+
+            System.out.println("Correo electrónico enviado correctamente a " + destinatario);
+        
+    }
+   */
+   
     public static List<PQRS> obtenerPQRSporUsuario(String usuarioId) {
         List<PQRS> pqrsList = new ArrayList<>();
         Connection conexion = null;

@@ -42,7 +42,7 @@ public class SvResponder extends HttpServlet {
             throws ServletException, IOException {
         
         String idPQRS = request.getParameter("idPQRS");
-        
+        String idUsuario = request.getParameter("idUsuario");
        
 
         String titulo = request.getParameter("titulo");
@@ -62,7 +62,7 @@ public class SvResponder extends HttpServlet {
         System.out.println("El id pqrs : "+idPQRS);
         GestionPQRS.responderPQRS(respuesta,idPQRS);
         
-        String script = "<script>alert('Respuesta realizada correctamente.'); window.location.href = 'templates/Admin.jsp';</script>";
+        String script = "<script>window.location.href = 'templates/Admin.jsp';</script>";
         response.setContentType("text/html");
         response.getWriter().write(script);
     }

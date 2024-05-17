@@ -13,6 +13,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
         <link rel="stylesheet" href="css/loginCss.css">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
         <title>Login</title>
     </head>
     <body>
@@ -89,7 +90,23 @@
                 </div>
             </div>
         </div>
-
+        
+        <%
+            String error = (String) request.getAttribute("error");
+            if (error != null && !error.isEmpty()) {
+        %>
+        <script>
+            // Muestra la alerta con Sweet Alert
+            Swal.fire({
+                title: 'Error',
+                text: '<%= error%>',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        </script>
+        <%
+            }
+        %>
 
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>

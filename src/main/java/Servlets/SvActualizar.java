@@ -65,7 +65,7 @@ public class SvActualizar extends HttpServlet {
 
             // Almacenar la lista actualizada en la sesión
             session.setAttribute("pqrss", pqrss);
-            String script = "<script>alert('Se actualizo correctamente.'); window.location.href = 'templates/User.jsp';</script>";
+            String script = "<script>window.location.href = 'templates/User.jsp';</script>";
             response.setContentType("text/html");
             response.getWriter().write(script);
         } else {

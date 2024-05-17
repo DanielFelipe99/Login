@@ -57,7 +57,7 @@ public class SvVerificarUsuario extends HttpServlet {
             session.setAttribute("nombreCompleto", nombreCompleto);
             session.setAttribute("tipoUsuario", "usuario"); // esta línea para usuarios normales
             
-            String script = "<script>alert('Usuario encontrado'); window.location.href = 'templates/User.jsp';</script>";
+            String script = "<script>window.location.href = 'templates/User.jsp';</script>";
             response.setContentType("text/html");
             response.getWriter().write(script);
         } else if (idAdmin != -1) {
@@ -74,14 +74,13 @@ public class SvVerificarUsuario extends HttpServlet {
             session.setAttribute("nombreAdmin", nombreCompleto);
             session.setAttribute("tipoUsuario", "administrador"); //tipo de usuario como administrador
             
-            String script = "<script>alert('Administrador encontrado'); window.location.href = 'templates/Admin.jsp';</script>";
+            String script = "<script>window.location.href = 'templates/Admin.jsp';</script>";
             response.setContentType("text/html");
             response.getWriter().write(script);
         } else {
             // Ningún usuario ni administrador encontrado, mostrar mensaje de error
-            String script = "<script>alert('Usuario o contraseña incorrectos. Por favor, inténtelo de nuevo.'); window.location.href = 'index.jsp';</script>";
-            response.setContentType("text/html");
-            response.getWriter().write(script);
+            request.setAttribute("error", "Usuario o contraseña incorrectos. Por favor, inténtelo de nuevo.");
+            request.getRequestDispatcher("index.jsp").forward(request, response);
         }
     }
 

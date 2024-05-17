@@ -14,6 +14,7 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Usuario</title>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <style>
             @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
@@ -203,17 +204,7 @@
             <section>
                 <div class="container my-4">
                     <!-- Sección para crear PQRS -->
-                    <div class="card mb-4">
-                        <div class="card-body">
-                            <form id="buscarPQRSForm">
-                                <div class="form-group">
-                                    <label for="buscarInput">Buscar por título o descripción:</label>
-                                    <input type="text" class="form-control" id="buscarInput" placeholder="Ingrese su búsqueda">
-                                </div>
-                                <button type="submit" class="btn btn-primary">Buscar</button>
-                            </form>
-                        </div>
-                    </div>
+                    
 
 
                     <!-- Sección para buscar VISUALIZAR -->
@@ -231,10 +222,7 @@
                             <div class="card overflow-auto">
                                 <div class="card-header d-flex justify-content-between align-items-center">
                                     <span>PQRS TITULO: <%= pqrs.getTitulo()%></span>
-                                    <div>
-                                        <button class="btn btn-danger btn-sm me-2 eliminar-btn" data-id="<%= pqrs.getIdPqrs()%>"><i class="fas fa-trash-alt"></i> Eliminar</button>
-                                        <button class="btn btn-primary btn-sm actualizar-btn" data-id="<%= pqrs.getIdPqrs()%>"><i class="fas fa-edit"></i> Actualizar</button>
-                                    </div>
+                                    
                                 </div>
                                 <div class="card-body">
                                     <h5 class="card-title">Descripción: <%= pqrs.getDescripcion()%></h5>
@@ -261,8 +249,17 @@
                                     %>
                                     <p class="card-text">Adjuntos: <%= pqrs.getAdjuntos()%></p>
                                     <p class="card-text">Estado: <%= pqrs.getEstado()%></p>
+                                    
+                                     <div>
+                                        <button class="btn btn-danger btn-sm me-2 eliminar-btn" data-id="<%= pqrs.getIdPqrs()%>"><i class="fas fa-trash-alt"></i> Eliminar</button>
+                                        <button class="btn btn-primary btn-sm actualizar-btn" data-id="<%= pqrs.getIdPqrs()%>"><i class="fas fa-edit"></i> Actualizar</button>
+                                    </div>
                                 </div>
+                                
+                                
                             </div>
+                                
+                               
                         </div>
                         <%
                             }
@@ -298,7 +295,7 @@
             </div>
             <div class="modal-body">
                 <!-- Formulario para crear PQRS -->
-                <form action="/Login/SvCrearPQRS" method="post" enctype="multipart/form-data">
+                <form action="/Login/SvCrearPQRS" method="post" enctype="multipart/form-data" onsubmit="return alertCrear()">
                     <div class="form-group">
                         <label for="tituloInput">Título</label>
                         <input type="text" class="form-control" id="tituloInput" name="titulo" placeholder="Ingrese el título">
@@ -347,7 +344,7 @@
             </div>
             <div class="modal-body">
                 <!-- Formulario para editar USUARIO -->
-                <form action="/Login/SvActualizarUsuario" method="get" enctype="multipart/form-data">
+                <form action="/Login/SvActualizarUsuario" method="get" enctype="multipart/form-data" onsubmit="return alertActualizarUser()">
                     <input type="hidden" id="editarIdUsuarioInput" name="idUsuario"> <!-- Campo oculto para almacenar el ID de la PQRS -->
 
                     <div class="form-group">
@@ -404,7 +401,7 @@
             </div>
             <div class="modal-body">
                 <!-- Formulario para editar PQRS -->
-                <form action="/Login/SvActualizar" method="get" enctype="multipart/form-data">
+                <form action="/Login/SvActualizar" method="get" enctype="multipart/form-data" onsubmit="return alertActualizar()">
                     <input type="hidden" id="editarIdPQRSInput" name="idPQRS"> <!-- Campo oculto para almacenar el ID de la PQRS -->
 
                     <div class="form-group">
@@ -484,32 +481,51 @@
 
         // Manejador de eventos para botones de "Eliminar"
         $('.eliminar-btn').click(function () {
-            var idPQRS = $(this).data('id');
-            if (confirm("¿Estás seguro de que deseas eliminar el tutorial con ID " + idPQRS + "?")) {
-
-                $.ajax({
-                    url: "/Login/SvEliminar?id=" + idPQRS,
-                    method: "POST",
-                    success: function (response) {
-                        // Manejar la respuesta del servidor
-                        if (response === "success") {
-
-                            alert("El PQRS se eliminó correctamente.");
+    var idPQRS = $(this).data('id');
+    
+    // Mostrar el Sweet Alert de confirmación
+    Swal.fire({
+        title: "¿Estás seguro?",
+        text: "¡No podrás revertir esto!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Sí, eliminarlo"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Si se confirma la eliminación, hacer la solicitud AJAX para eliminar el PQRS
+            $.ajax({
+                url: "/Login/SvEliminar?id=" + idPQRS,
+                method: "POST",
+                success: function (response) {
+                    // Manejar la respuesta del servidor
+                    if (response === "success") {
+                        // Mostrar un Sweet Alert de éxito
+                        Swal.fire({
+                            title: "¡Eliminado!",
+                            text: "El PQRS se eliminó correctamente.",
+                            icon: "success"
+                        }).then(() => {
+                            // Recargar la página después de cerrar el Sweet Alert
                             location.reload();
-                        } else {
-
-                            alert("Hubo un error al eliminar PQRS.");
-                        }
-                    },
-                    error: function (error) {
-                        console.error("Error al eliminar el PQRS", error);
+                        });
+                    } else {
+                        // Mostrar un Sweet Alert de error si la eliminación falla
+                        Swal.fire({
+                            title: "Error",
+                            text: "Hubo un error al eliminar el PQRS.",
+                            icon: "error"
+                        });
                     }
-                });
-            } else {
-
-
-            }
-        });
+                },
+                error: function (error) {
+                    console.error("Error al eliminar el PQRS", error);
+                }
+            });
+        }
+    });
+});
 
     });
 
@@ -584,6 +600,52 @@
         });
     });
 </script>
+
+<script>
+    function alertCrear(){
+        Swal.fire({
+                title: "¡Correcto!",
+                text: "PQRS creada correctamente!",
+                icon: "success",
+                timer: 3000, // Tiempo en milisegundos (3 segundos)
+                timerProgressBar: true
+            });
+            return true;
+        
+    }
+    
+</script>
+
+<script>
+    function alertActualizar(){
+        Swal.fire({
+                title: "¡Correcto!",
+                text: "PQRS actualizada correctamente!",
+                icon: "success",
+                timer: 3000, // Tiempo en milisegundos (3 segundos)
+                timerProgressBar: true
+            });
+            return true;
+        
+    }
+    
+</script>
+
+<script>
+    function alertActualizarUser(){
+        Swal.fire({
+                title: "¡Correcto!",
+                text: "Usuario actualizado correctamente!",
+                icon: "success",
+                timer: 3000, // Tiempo en milisegundos (3 segundos)
+                timerProgressBar: true
+            });
+            return true;
+        
+    }
+    
+</script>
+
 
 </body>
 </html>

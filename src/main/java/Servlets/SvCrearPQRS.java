@@ -89,7 +89,7 @@ public class SvCrearPQRS extends HttpServlet {
         session.setAttribute("pqrss", pqrss);
 
         // Redireccionar a la página de usuario
-        String script = "<script>alert('PQRS creada exitosamente'); window.location.href = 'templates/User.jsp';</script>";
+        String script = "<script>window.location.href = 'templates/User.jsp';</script>";
         response.setContentType("text/html");
         response.getWriter().write(script);
     }

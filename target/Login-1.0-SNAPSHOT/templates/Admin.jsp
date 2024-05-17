@@ -13,6 +13,7 @@
         <!-- Agregar enlaces a los archivos CSS de Bootstrap -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <title>Administrador</title>
         <style>
             @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
@@ -190,7 +191,7 @@
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                     <!-- Opciones del menú desplegable -->
-                                    <a class="dropdown-item" href="#">Editar información</a>
+                                    
                                     <a class="dropdown-item" href="../index.jsp">Cerrar sesión</a>
                                 </div>
                             </li>
@@ -281,7 +282,7 @@
                                                                 </button>
                                                             </div>
                                                             <div class="modal-body">
-                                                                <form id="formRespuestaPQRS" action="/Login/SvResponder" method="post">
+                                                                <form id="formRespuestaPQRS" action="/Login/SvResponder" method="post" onsubmit="return alertResponder()">
                                                                     <div class="form-group">
                                                                         <label for="respuesta">Respuesta:</label>
                                                                         <textarea class="form-control" id="respuesta" name="respuesta" rows="3" placeholder="Ingrese la respuesta"></textarea>
@@ -357,6 +358,21 @@
             });
         });
     });
+</script>
+
+<script>
+    function alertResponder(){
+        Swal.fire({
+                title: "¡Correcto!",
+                text: "Respuesta creada correctamente!",
+                icon: "success",
+                timer: 6000, // Tiempo en milisegundos (3 segundos)
+                timerProgressBar: true
+            });
+            return true;
+        
+    }
+    
 </script>
 </body>
 </html>
