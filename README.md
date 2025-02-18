@@ -1,4 +1,6 @@
 # HOLA
 
+- perimétrico
+- otro
 
 ### HOLA
