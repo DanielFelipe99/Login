@@ -1,6 +1,6 @@
 # HOLA
 
-- perimétrico
+- *perimétrico*
 - otro
 
 ### HOLA
